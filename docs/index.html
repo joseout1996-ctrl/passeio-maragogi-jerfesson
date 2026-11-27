@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090d12">
+  <meta name="description" content="Conheça os passeios de Maragogi com Passeio Maragogi Jerfesson. Entre em contato pelo Instagram e faça seu Pix.">
+  <title>Passeio Maragogi Jerfesson</title>
+  <style>
+    :root{--orange:#ff8a00;--blue:#00b9d8;--ink:#080c12;--white:#fff}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;font-family:Arial,Helvetica,sans-serif;color:#fff;background:radial-gradient(ellipse at 50% 0%,#123d58 0%,#101d2a 38%,#070a0f 78%);padding:28px 16px 36px}
+    .wrap{width:100%;max-width:440px;margin:0 auto;text-align:center}
+    .logo{width:min(78vw,300px);aspect-ratio:1;object-fit:contain;border-radius:50%;border:4px solid var(--orange);box-shadow:0 0 0 5px #080c12,0 0 28px #ff8a0060;margin:0 auto 20px;display:block;background:#080c12}
+    h1{font-size:clamp(25px,7vw,34px);line-height:1.08;margin:0 0 9px;font-weight:800}
+    .sub{color:#c9d8e2;font-size:15px;margin:0 0 25px}
+    .buttons{display:grid;gap:13px}
+    .btn{min-height:56px;border:0;border-radius:15px;padding:16px 18px;display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;font-weight:800;font-size:16px;color:#081018;background:linear-gradient(110deg,#ff9d18,#ff7900);box-shadow:0 5px 0 #9b4c00;cursor:pointer}
+    .btn.blue{background:linear-gradient(110deg,#36d5e9,#009fc4);box-shadow:0 5px 0 #00617b}
+    .btn.dark{color:#fff;background:#172330;border:1px solid #385064;box-shadow:0 5px 0 #080c12}
+    .btn:active{transform:translateY(2px);box-shadow:none}
+    .pix-panel{display:none;margin-top:20px;padding:17px;background:#fff;border-radius:18px;color:#101820}
+    .pix-panel.show{display:block}
+    .pix-panel img{display:block;width:100%;max-width:330px;margin:12px auto;border-radius:8px}
+    .pix-panel p{margin:7px 0;color:#172330;font-size:14px;overflow-wrap:anywhere}
+    .pix-key{font-weight:800;letter-spacing:.3px}
+    .copy{border:0;border-radius:10px;padding:12px 18px;background:#ff8a00;color:#111;font-weight:800;font-size:15px}
+    .google-note{opacity:.8;font-size:12px;margin:20px 0 0;color:#cbd5df}
+    footer{margin-top:28px;color:#a9bac8;font-size:12px}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <img class="logo" src="logo.jpg" alt="Logo Passeio Maragogi Jerfesson">
+    <h1>Passeio Maragogi<br>Jerfesson</h1>
+    <p class="sub">Viva momentos inesquecíveis em Maragogi!</p>
+    <section class="buttons" aria-label="Links e pagamentos">
+      <a class="btn" href="https://www.instagram.com/passeiomaragogi.jerfesson/" target="_blank" rel="noopener">📸 Instagram</a>
+      <button class="btn blue" type="button" id="showPix">💠 Ver QR Code Pix</button>
+      <button class="btn dark" type="button" id="copyPix">📋 Copiar chave Pix</button>
+      <a class="btn dark" href="https://www.google.com/search?q=Passeio+Maragogi+Jerfesson" target="_blank" rel="noopener">⭐ Encontrar no Google</a>
+    </section>
+    <section class="pix-panel" id="pixPanel" aria-live="polite">
+      <strong>Escaneie para pagar com Pix</strong>
+      <img src="pix.png" alt="QR Code Pix do Passeio Maragogi Jerfesson">
+      <p>Chave Pix</p>
+      <p class="pix-key">82981026722</p>
+      <button class="copy" type="button" id="copyPix2">Copiar chave Pix</button>
+    </section>
+    <p class="google-note">O link direto para avaliações do Google será adicionado após a aprovação do perfil da empresa.</p>
+    <footer>© Passeio Maragogi Jerfesson</footer>
+  </main>
+  <script>
+    const pixKey = '82981026722';
+    const panel = document.getElementById('pixPanel');
+    document.getElementById('showPix').addEventListener('click', () => panel.classList.toggle('show'));
+    async function copyPix(){
+      try{
+        await navigator.clipboard.writeText(pixKey);
+        alert('Chave Pix copiada!');
+      }catch(e){
+        const field=document.createElement('textarea');field.value=pixKey;document.body.appendChild(field);field.select();document.execCommand('copy');field.remove();alert('Chave Pix copiada!');
+      }
+    }
+    document.getElementById('copyPix').addEventListener('click',copyPix);
+    document.getElementById('copyPix2').addEventListener('click',copyPix);
+  </script>
+</body>
+</html>
