@@ -41,6 +41,8 @@
     .copy{border:0;border-radius:10px;padding:12px 18px;background:#ff8a00;color:#111;font-weight:800;font-size:15px}
     .google-note{opacity:.8;font-size:12px;margin:20px 0 0;color:#cbd5df}
     footer{margin-top:28px;color:#a9bac8;font-size:12px}
+    .pix-toast{position:fixed;left:50%;bottom:28px;z-index:10001;transform:translate(-50%,18px);padding:13px 20px;border-radius:14px;background:#153c2c;color:#fff;font-size:14px;font-weight:700;box-shadow:0 8px 28px #0008;opacity:0;visibility:hidden;transition:opacity .2s ease,transform .2s ease;white-space:nowrap}
+    .pix-toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
   </style>
 </head>
 <body>
@@ -77,12 +79,29 @@
     document.getElementById('closePix').addEventListener('click', closePix);
     panel.addEventListener('click', (event) => { if(event.target === panel) closePix(); });
     document.addEventListener('keydown', (event) => { if(event.key === 'Escape') closePix(); });
+    let toastTimer;
+    function showPixToast(message){
+      const toast=document.getElementById('pixToast');
+      toast.textContent=message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer=setTimeout(()=>toast.classList.remove('show'),2200);
+    }
     async function copyPix(){
       try{
         await navigator.clipboard.writeText(pixKey);
-        alert('Chave Pix copiada!');
+        showPixToast('Chave Pix copiada!');
       }catch(e){
-        const field=document.createElement('textarea');field.value=pixKey;document.body.appendChild(field);field.select();document.execCommand('copy');field.remove();alert('Chave Pix copiada!');
+        const field=document.createElement('textarea');
+        field.value=pixKey;
+        field.setAttribute('readonly','');
+        field.style.position='fixed';
+        field.style.opacity='0';
+        document.body.appendChild(field);
+        field.select();
+        const copied=document.execCommand('copy');
+        field.remove();
+        showPixToast(copied?'Chave Pix copiada!':'Não foi possível copiar a chave Pix.');
       }
     }
     document.getElementById('copyPix').addEventListener('click',copyPix);
