@@ -29,9 +29,13 @@
     .btn .ico.google{color:#fff}
     .btn.dark .ico{color:#e3edf5}
     .btn.blue .ico{color:#073743}
-    .pix-panel{display:none;margin-top:20px;padding:17px;background:#fff;border-radius:18px;color:#101820}
-    .pix-panel.show{display:block}
-    .pix-panel img{display:block;width:100%;max-width:330px;margin:12px auto;border-radius:8px}
+    .pix-panel{display:none;position:fixed;inset:0;z-index:9999;margin:0;padding:20px;background:rgba(3,8,14,.88);backdrop-filter:blur(7px);align-items:center;justify-content:center;color:#101820}
+    .pix-panel.show{display:flex}
+    .pix-content{position:relative;width:min(100%,390px);max-height:90vh;overflow:auto;padding:22px 18px 20px;background:#fff;border-radius:24px;box-shadow:0 22px 70px #0009;text-align:center}
+    .pix-panel img{display:block;width:100%;max-width:330px;max-height:55vh;object-fit:contain;margin:14px auto;border-radius:8px}
+    .pix-close{position:absolute;top:10px;right:12px;width:36px;height:36px;border:0;border-radius:50%;background:#eef2f5;color:#172330;font-size:24px;line-height:1;cursor:pointer}
+    .pix-title{display:block;padding:2px 38px 0;font-size:18px;color:#101820}
+    .pix-hint{font-size:13px;color:#52616d;margin:4px 0 10px}
     .pix-panel p{margin:7px 0;color:#172330;font-size:14px;overflow-wrap:anywhere}
     .pix-key{font-weight:800;letter-spacing:.3px}
     .copy{border:0;border-radius:10px;padding:12px 18px;background:#ff8a00;color:#111;font-weight:800;font-size:15px}
@@ -50,12 +54,16 @@
       <button class="btn dark" type="button" id="copyPix"><span class="ico copy" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="8" y="8" width="12" height="13" rx="2" stroke="currentColor" stroke-width="1.9"/><path d="M16 8V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></span><span class="btn-label">Copiar chave Pix</span></button>
       <a class="btn dark" href="https://www.google.com/search?q=Passeio+Maragogi+Jerfesson" target="_blank" rel="noopener"><span class="ico google" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M21.6 12.23c0-.72-.06-1.42-.18-2.09H12v3.95h5.38a4.6 4.6 0 0 1-2 3.02v2.56h3.24c1.9-1.75 2.98-4.33 2.98-7.44Z"/><path fill="#34A853" d="M12 22c2.7 0 4.97-.9 6.62-2.43l-3.24-2.56c-.9.6-2.04.96-3.38.96-2.6 0-4.8-1.76-5.58-4.12H3.07v2.64A10 10 0 0 0 12 22Z"/><path fill="#FBBC05" d="M6.42 13.85a6 6 0 0 1 0-3.7V7.5H3.07a10 10 0 0 0 0 9Z"/><path fill="#EA4335" d="M12 6.03c1.47 0 2.79.5 3.83 1.52l2.87-2.87C16.96 3.06 14.7 2 12 2a10 10 0 0 0-8.93 5.5l3.35 2.65C7.2 7.79 9.4 6.03 12 6.03Z"/></svg></span><span class="btn-label">Encontrar no Google</span></a>
     </section>
-    <section class="pix-panel" id="pixPanel" aria-live="polite">
-      <strong>Escaneie para pagar com Pix</strong>
-      <img src="pix.png" alt="QR Code Pix do Passeio Maragogi Jerfesson">
-      <p>Chave Pix</p>
-      <p class="pix-key">82981026722</p>
-      <button class="copy" type="button" id="copyPix2">Copiar chave Pix</button>
+    <section class="pix-panel" id="pixPanel" aria-live="polite" role="dialog" aria-modal="true" aria-label="QR Code Pix">
+      <div class="pix-content">
+        <button class="pix-close" type="button" id="closePix" aria-label="Fechar">×</button>
+        <strong class="pix-title">Pague com Pix</strong>
+        <p class="pix-hint">Aponte a câmera do seu celular para o QR Code</p>
+        <img src="pix.png" alt="QR Code Pix do Passeio Maragogi Jerfesson">
+        <p>Chave Pix</p>
+        <p class="pix-key">82981026722</p>
+        <button class="copy" type="button" id="copyPix2">Copiar chave Pix</button>
+      </div>
     </section>
     <p class="google-note">O link direto para avaliações do Google será adicionado após a aprovação do perfil da empresa.</p>
     <footer>© Passeio Maragogi Jerfesson</footer>
@@ -63,7 +71,12 @@
   <script>
     const pixKey = '82981026722';
     const panel = document.getElementById('pixPanel');
-    document.getElementById('showPix').addEventListener('click', () => panel.classList.toggle('show'));
+    const openPix = () => { panel.classList.add('show'); document.body.style.overflow='hidden'; };
+    const closePix = () => { panel.classList.remove('show'); document.body.style.overflow=''; };
+    document.getElementById('showPix').addEventListener('click', openPix);
+    document.getElementById('closePix').addEventListener('click', closePix);
+    panel.addEventListener('click', (event) => { if(event.target === panel) closePix(); });
+    document.addEventListener('keydown', (event) => { if(event.key === 'Escape') closePix(); });
     async function copyPix(){
       try{
         await navigator.clipboard.writeText(pixKey);
